@@ -1,5 +1,21 @@
 {
+    "name": "martinvondrak/platba-mobilom-php-sdk",
+    "description": "SDK for payment gateway PlatbaMobilom.sk",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Martin Vondrák",
+            "email": "martinvondrak@icloud.com",
+            "homepage": "http://martinvondrak.cz",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "guzzlehttp/guzzle": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "MartinVondrak\\PlatbaMobilom\\": "src/"
+        }
     }
 }
