@@ -13,11 +13,11 @@ interface PlatbaMobilomClientInterface
      *
      * @param int    $pid merchant ID
      * @param string $url merchant URL
-     * @param string $email merchant e-mail
      * @param string $pwd secret key
+     * @param string $email merchant e-mail
      * @param bool   $debug flag whether test gateway should be used
      */
-    public function __construct(int $pid, string $url, string $email, string $pwd, bool $debug = false);
+    public function __construct(int $pid, string $url, string $pwd, string $email = null, bool $debug = false);
 
     /**
      * Prepare data and generate URL for redirect to gateway
