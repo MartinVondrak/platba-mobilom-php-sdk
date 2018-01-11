@@ -30,7 +30,7 @@ class PlatbaMobilomClient implements PlatbaMobilomClientInterface
     /**
      * @inheritdoc
      */
-    public function __construct(int $pid, string $url, string $email, string $pwd, bool $debug = false)
+    public function __construct(int $pid, string $url, string $pwd, string $email = null, bool $debug = false)
     {
         if ($debug) {
             $this->gatewayUrl = static::TEST_GATEWAY;
