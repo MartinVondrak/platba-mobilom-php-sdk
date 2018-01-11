@@ -1,6 +1,9 @@
 {
     "name": "martinvondrak/platba-mobilom-php-sdk",
-    "description": "SDK for payment gateway PlatbaMobilom.sk",
+    "type": "library",
+    "description": "SDK for payment gateway PlatbaMobilom.sk for PHP7.0",
+    "keywords": ["payment", "sms"],
+    "homepage": "https://github.com/MartinVondrak/platba-mobilom-php-sdk",
     "license": "MIT",
     "authors": [
         {
@@ -11,7 +14,7 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "^6.3"
+        "php": ">=7.0"
     },
     "autoload": {
         "psr-4": {
