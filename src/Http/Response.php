@@ -24,6 +24,7 @@ class Response
     /** @var string $sign signature of received data */
     private $sign;
 
+
     /**
      * Response constructor
      *

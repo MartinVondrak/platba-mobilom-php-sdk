@@ -11,6 +11,18 @@ class PlatbaMobilomClient implements PlatbaMobilomClientInterface
     const GATEWAY = 'https://pay.platbamobilom.sk/pay/';
     const TEST_GATEWAY = 'https://pay.platbamobilom.sk/test/';
 
+    /** @var string $gatewayUrl redirect to this URL for payment */
+    private $gatewayUrl;
+
+    /** @var int $pid merchant ID */
+    private $pid;
+
+    /** @var string $url redirect to this URL after payment */
+    private $merchantUrl;
+
+    /** @var string $email send notification to this email after payment */
+    private $email;
+
     /** @var string $pwd secure key */
     private $pwd;
 
@@ -18,33 +30,36 @@ class PlatbaMobilomClient implements PlatbaMobilomClientInterface
     /**
      * @inheritdoc
      */
-    public function __construct(string $pwd)
+    public function __construct(int $pid, string $url, string $email, string $pwd, bool $debug = false)
     {
+        if ($debug) {
+            $this->gatewayUrl = static::TEST_GATEWAY;
+        } else {
+            $this->gatewayUrl = static::GATEWAY;
+        }
+
+        $this->pid = $pid;
+        $this->merchantUrl = $url;
+        $this->email = $email;
         $this->pwd = $pwd;
     }
 
     /**
      * @inheritdoc
      */
-    public function getGatewayUrl(Request $request, bool $debug = false): string
+    public function getGatewayUrl(Request $request): string
     {
-        if ($debug) {
-            $host = static::TEST_GATEWAY;
-        } else {
-            $host = static::GATEWAY;
-        }
-
         $queryString = http_build_query([
-            'PID' => $request->getPid(),
+            'PID' => $this->pid,
             'ID' => $request->getId(),
             'DESC' => $request->getDescription(),
             'PRICE' => $request->getPrice(),
-            'URL' => $request->getUrl(),
-            'EMAIL' => $request->getEmail(),
-            'SIGN' => $request->calculateSign($this->pwd)
+            'URL' => $this->merchantUrl,
+            'EMAIL' => $this->email,
+            'SIGN' => $this->calculateRequestSignature($request)
         ]);
 
-        return sprintf('%s?%s', $host, $queryString);
+        return sprintf('%s?%s', $this->gatewayUrl, $queryString);
     }
 
     /**
@@ -57,5 +72,18 @@ class PlatbaMobilomClient implements PlatbaMobilomClientInterface
         }
 
         return $response->isSuccessful();
+    }
+
+    /**
+     * Calculates signature for request data
+     *
+     * @param Request $request
+     * @return string
+     */
+    private function calculateRequestSignature(Request $request)
+    {
+        $message = $this->pid . $request->getId() . $request->getDescription() . $request->getPrice() . $this->merchantUrl . $this->email;
+        $sign = strtoupper(hash_hmac('sha256', $message, $this->pwd, false));
+        return $sign;
     }
 }
