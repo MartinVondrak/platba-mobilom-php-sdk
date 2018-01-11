@@ -22,7 +22,7 @@ class Response
     private $phone;
 
     /** @var string $sign signature of received data */
-    private $sign;
+    private $signature;
 
 
     /**
@@ -30,15 +30,15 @@ class Response
      *
      * @param string   $id
      * @param string   $result
-     * @param string   $sign
+     * @param string   $signature
      * @param int|null $phone
      */
-    public function __construct(string $id, string $result, string $sign, int $phone = null)
+    public function __construct(string $id, string $result, string $signature, int $phone = null)
     {
         $this->id = $id;
         $this->result = $result;
         $this->phone = $phone;
-        $this->sign = $sign;
+        $this->signature = $signature;
     }
 
     /**
@@ -70,7 +70,7 @@ class Response
     public function verifySignature($pwd): bool
     {
         $message = $this->id . $this->result . $this->phone;
-        $sign = strtoupper(hash_hmac('sha256', $message, $pwd, false));
-        return $this->sign == $sign;
+        $calculatedSignature = strtoupper(hash_hmac('sha256', $message, $pwd, false));
+        return $this->signature == $calculatedSignature;
     }
 }
