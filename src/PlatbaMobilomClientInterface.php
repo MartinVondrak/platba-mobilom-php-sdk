@@ -22,12 +22,14 @@ interface PlatbaMobilomClientInterface
      * @param bool    $debug flag whether test gateway should be used
      * @return string gateway URL with parameters
      */
-    public function getGatewayUrl(Request $request, bool $debug = false);
+    public function getGatewayUrl(Request $request, bool $debug = false): string;
 
     /**
+     * Verifies response signature and checks status
+     *
      * @param Response $response
-     * @return mixed
-     * @throws InvalidSignatureException
+     * @return bool true if payment was successful false otherwise
+     * @throws InvalidSignatureException if signature of response is not valid
      */
-    public function checkResponse(Response $response);
+    public function checkResponse(Response $response): bool;
 }

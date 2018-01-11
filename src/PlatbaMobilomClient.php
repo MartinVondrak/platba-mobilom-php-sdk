@@ -50,7 +50,7 @@ class PlatbaMobilomClient implements PlatbaMobilomClientInterface
     /**
      * @inheritdoc
      */
-    public function checkResponse(Response $response)
+    public function checkResponse(Response $response): bool
     {
         if (!$response->verifySignature($this->pwd)) {
             throw new InvalidSignatureException();
