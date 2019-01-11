@@ -3,7 +3,7 @@
 $fileHeaderComment = <<<COMMENT
 PlatbaMobilom.sk PHP SDK
 
-This file is part of Payment Bundle.
+This file is part of PlatbaMobilom.sk PHP SDK.
 See LICENSE file for full license details.
 
 (c) 2019 Martin Vondrák
@@ -12,8 +12,7 @@ COMMENT;
 return PhpCsFixer\Config::create()
     ->setRiskyAllowed(true)
     ->setRules([
-        '@Symfony' => true,
-        '@Symfony:risky' => true,
+        '@PSR2' => true,
         'array_syntax' => ['syntax' => 'short'],
         'header_comment' => ['header' => $fileHeaderComment, 'separate' => 'bottom'],
         'linebreak_after_opening_tag' => true,
