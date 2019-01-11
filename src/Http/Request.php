@@ -1,4 +1,12 @@
 <?php
+/*
+ * PlatbaMobilom.sk PHP SDK
+ *
+ * This file is part of PlatbaMobilom.sk PHP SDK.
+ * See LICENSE file for full license details.
+ *
+ * (c) 2019 Martin Vondrák
+ */
 
 namespace MartinVondrak\PlatbaMobilom\Http;
 
@@ -18,7 +26,7 @@ class Request
     private $price;
 
     /**
-     * Request constructor
+     * Request constructor.
      *
      * @param string $id
      * @param string $description
@@ -32,7 +40,7 @@ class Request
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return string
      */
@@ -42,7 +50,7 @@ class Request
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -52,7 +60,7 @@ class Request
     }
 
     /**
-     * Get price
+     * Get price.
      *
      * @return float
      */
