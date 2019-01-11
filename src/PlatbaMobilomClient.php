@@ -1,4 +1,12 @@
 <?php
+/*
+ * PlatbaMobilom.sk PHP SDK
+ *
+ * This file is part of PlatbaMobilom.sk PHP SDK.
+ * See LICENSE file for full license details.
+ *
+ * (c) 2019 Martin Vondrák
+ */
 
 namespace MartinVondrak\PlatbaMobilom;
 
@@ -26,9 +34,8 @@ class PlatbaMobilomClient implements PlatbaMobilomClientInterface
     /** @var string $pwd secure key */
     private $pwd;
 
-
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function __construct(int $pid, string $url, string $pwd, string $email = null, bool $debug = false)
     {
@@ -45,7 +52,7 @@ class PlatbaMobilomClient implements PlatbaMobilomClientInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getGatewayUrl(Request $request): string
     {
@@ -56,34 +63,34 @@ class PlatbaMobilomClient implements PlatbaMobilomClientInterface
             'PRICE' => $request->getPrice(),
             'URL' => $this->merchantUrl,
             'EMAIL' => $this->email,
-            'SIGN' => $this->calculateRequestSignature($request)
+            'SIGN' => $this->calculateRequestSignature($request),
         ]);
 
         return sprintf('%s?%s', $this->gatewayUrl, $queryString);
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function checkResponse(Response $response): bool
     {
         if (!$response->verifySignature($this->pwd)) {
-            throw new InvalidSignatureException();
+            throw new InvalidSignatureException('Invalid signature received from PlatbaMobilom.sk');
         }
 
         return $response->isSuccessful();
     }
 
     /**
-     * Calculates signature for request data
+     * Calculates signature for request data.
      *
      * @param Request $request
+     *
      * @return string
      */
-    private function calculateRequestSignature(Request $request)
+    private function calculateRequestSignature(Request $request): string
     {
         $message = $this->pid . $request->getId() . $request->getDescription() . $request->getPrice() . $this->merchantUrl . $this->email;
-        $sign = strtoupper(hash_hmac('sha256', $message, $this->pwd, false));
-        return $sign;
+        return strtoupper(hash_hmac('sha256', $message, $this->pwd));
     }
 }

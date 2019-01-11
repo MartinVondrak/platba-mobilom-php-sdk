@@ -1,4 +1,12 @@
 <?php
+/*
+ * PlatbaMobilom.sk PHP SDK
+ *
+ * This file is part of PlatbaMobilom.sk PHP SDK.
+ * See LICENSE file for full license details.
+ *
+ * (c) 2019 Martin Vondrák
+ */
 
 namespace MartinVondrak\PlatbaMobilom\Http;
 
@@ -18,7 +26,7 @@ class Request
     private $price;
 
     /**
-     * Request constructor
+     * Request constructor.
      *
      * @param string $id
      * @param string $description
@@ -27,12 +35,12 @@ class Request
     public function __construct(string $id, string $description, float $price)
     {
         $this->id = $id;
-        $this->description = $description;
+        $this->description = static::sanitizeDescription($description);
         $this->price = $price;
     }
 
     /**
-     * Get id
+     * Get id.
      *
      * @return string
      */
@@ -42,7 +50,7 @@ class Request
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -52,12 +60,42 @@ class Request
     }
 
     /**
-     * Get price
+     * Get price.
      *
      * @return float
      */
     public function getPrice(): float
     {
         return $this->price;
+    }
+
+    /**
+     * Sanitizes description according to rules of gateway.
+     *
+     * @param string $description
+     * @return string
+     */
+    private static function sanitizeDescription(string $description): string
+    {
+        $allowedChars = array_merge(
+            range('0', '9'),
+            range('a', 'z'),
+            range('A', 'Z'),
+            ['-', ' ', '.']
+        );
+
+        $description = mb_substr($description, 0, 30);
+        $chars = preg_split('//u', $description, null, PREG_SPLIT_NO_EMPTY);
+        $newChars = [];
+
+        foreach ($chars as $char) {
+            if (!in_array($char, $allowedChars, true)) {
+                $newChars[] = '-';
+            } else {
+                $newChars[] = $char;
+            }
+        }
+
+        return implode($newChars);
     }
 }

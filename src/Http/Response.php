@@ -1,4 +1,12 @@
 <?php
+/*
+ * PlatbaMobilom.sk PHP SDK
+ *
+ * This file is part of PlatbaMobilom.sk PHP SDK.
+ * See LICENSE file for full license details.
+ *
+ * (c) 2019 Martin Vondrák
+ */
 
 namespace MartinVondrak\PlatbaMobilom\Http;
 
@@ -24,9 +32,8 @@ class Response
     /** @var string $sign signature of received data */
     private $signature;
 
-
     /**
-     * Response constructor
+     * Response constructor.
      *
      * @param string   $id
      * @param string   $result
@@ -42,7 +49,7 @@ class Response
     }
 
     /**
-     * Get result
+     * Get result.
      *
      * @return string
      */
@@ -52,25 +59,27 @@ class Response
     }
 
     /**
-     * Check whether payment was successful
+     * Check whether payment was successful.
      *
      * @return bool true if successful false otherwise
      */
     public function isSuccessful(): bool
     {
-        return $this->result == self::OK;
+        return self::OK === $this->result;
     }
 
     /**
-     * Verify data signature
+     * Verify data signature.
      *
      * @param string $pwd secure key
+     *
      * @return bool true if signature is valid false otherwise
      */
     public function verifySignature($pwd): bool
     {
-        $message = $this->id . $this->result . $this->phone;
-        $calculatedSignature = strtoupper(hash_hmac('sha256', $message, $pwd, false));
-        return $this->signature == $calculatedSignature;
+        $message = $this->id.$this->result.$this->phone;
+        $calculatedSignature = strtoupper(hash_hmac('sha256', $message, $pwd));
+
+        return $this->signature === $calculatedSignature;
     }
 }
