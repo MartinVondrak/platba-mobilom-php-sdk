@@ -35,7 +35,7 @@ class Request
     public function __construct(string $id, string $description, float $price)
     {
         $this->id = $id;
-        $this->description = $description;
+        $this->description = static::sanitizeDescription($description);
         $this->price = $price;
     }
 
@@ -67,5 +67,35 @@ class Request
     public function getPrice(): float
     {
         return $this->price;
+    }
+
+    /**
+     * Sanitizes description according to rules of gateway.
+     *
+     * @param string $description
+     * @return string
+     */
+    private static function sanitizeDescription(string $description): string
+    {
+        $allowedChars = array_merge(
+            range('0', '9'),
+            range('a', 'z'),
+            range('A', 'Z'),
+            ['-', ' ', '.']
+        );
+
+        $description = mb_substr($description, 0, 30);
+        $chars = preg_split('//u', $description, null, PREG_SPLIT_NO_EMPTY);
+        $newChars = [];
+
+        foreach ($chars as $char) {
+            if (!in_array($char, $allowedChars, true)) {
+                $newChars[] = '-';
+            } else {
+                $newChars[] = $char;
+            }
+        }
+
+        return implode($newChars);
     }
 }
