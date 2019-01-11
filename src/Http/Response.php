@@ -65,7 +65,7 @@ class Response
      */
     public function isSuccessful(): bool
     {
-        return self::OK == $this->result;
+        return self::OK === $this->result;
     }
 
     /**
@@ -78,8 +78,8 @@ class Response
     public function verifySignature($pwd): bool
     {
         $message = $this->id.$this->result.$this->phone;
-        $calculatedSignature = strtoupper(hash_hmac('sha256', $message, $pwd, false));
+        $calculatedSignature = strtoupper(hash_hmac('sha256', $message, $pwd));
 
-        return $this->signature == $calculatedSignature;
+        return $this->signature === $calculatedSignature;
     }
 }

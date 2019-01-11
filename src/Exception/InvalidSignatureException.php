@@ -10,6 +10,10 @@
 
 namespace MartinVondrak\PlatbaMobilom\Exception;
 
+/**
+ * Class InvalidSignatureException represents error during verification
+ * of response signature.
+ */
 class InvalidSignatureException extends \RuntimeException
 {
 }

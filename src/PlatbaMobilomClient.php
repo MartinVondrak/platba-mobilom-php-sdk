@@ -75,7 +75,7 @@ class PlatbaMobilomClient implements PlatbaMobilomClientInterface
     public function checkResponse(Response $response): bool
     {
         if (!$response->verifySignature($this->pwd)) {
-            throw new InvalidSignatureException();
+            throw new InvalidSignatureException('Invalid signature received from PlatbaMobilom.sk');
         }
 
         return $response->isSuccessful();
@@ -88,11 +88,9 @@ class PlatbaMobilomClient implements PlatbaMobilomClientInterface
      *
      * @return string
      */
-    private function calculateRequestSignature(Request $request)
+    private function calculateRequestSignature(Request $request): string
     {
-        $message = $this->pid.$request->getId().$request->getDescription().$request->getPrice().$this->merchantUrl.$this->email;
-        $sign = strtoupper(hash_hmac('sha256', $message, $this->pwd, false));
-
-        return $sign;
+        $message = $this->pid . $request->getId() . $request->getDescription() . $request->getPrice() . $this->merchantUrl . $this->email;
+        return strtoupper(hash_hmac('sha256', $message, $this->pwd));
     }
 }
